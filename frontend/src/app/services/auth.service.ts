@@ -37,7 +37,7 @@ export class AuthService {
     private router: Router
   ) {}
 
-  // ✅ Updated API route with /api prefix
+  // ✅ Updated API route with /api Prefix
   login(username: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/api/auth/login`, { username, password })
       .pipe(
