@@ -1,5 +1,6 @@
 export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:3000/api'
+  production: true,
+  apiUrl: 'https://inventory-billing-system-v4bi.onrender.com/'
+
 };
 
