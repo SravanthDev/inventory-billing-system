@@ -5,8 +5,13 @@ require('dotenv').config();
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// Middleware - CORS configured to allow all origins
+app.use(cors({
+  origin: '*',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -53,4 +58,3 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/inventory
 });
 
 module.exports = app;
-
