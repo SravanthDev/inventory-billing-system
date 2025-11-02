@@ -37,8 +37,9 @@ export class AuthService {
     private router: Router
   ) {}
 
+  // ✅ Updated API route with /api prefix
   login(username: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, { username, password })
+    return this.http.post<LoginResponse>(`${this.apiUrl}/api/auth/login`, { username, password })
       .pipe(
         tap(response => {
           this.setToken(response.token);
@@ -49,8 +50,9 @@ export class AuthService {
       );
   }
 
+  // ✅ Updated API route with /api prefix
   register(userData: any): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/register`, userData)
+    return this.http.post<LoginResponse>(`${this.apiUrl}/api/auth/register`, userData)
       .pipe(
         tap(response => {
           this.setToken(response.token);
@@ -100,4 +102,3 @@ export class AuthService {
     this.currentUserSubject.next(user);
   }
 }
-
