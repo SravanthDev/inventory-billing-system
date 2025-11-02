@@ -39,8 +39,9 @@ export class DashboardComponent implements OnInit {
       tooltip: {
         enabled: true,
         callbacks: {
-          label: function(context) {
-            return 'Revenue: ₹' + context.parsed.y.toFixed(2);
+          label: function(context: any) {
+            const value = context.parsed?.y ?? 0;
+            return 'Revenue: ₹' + value.toFixed(2);
           }
         }
       }
@@ -49,7 +50,7 @@ export class DashboardComponent implements OnInit {
       y: {
         beginAtZero: true,
         ticks: {
-          callback: function(value) {
+          callback: function(value: any) {
             return '₹' + value;
           }
         }
@@ -70,14 +71,13 @@ export class DashboardComponent implements OnInit {
     this.loading = true;
     this.apiService.getDashboardStats().subscribe({
       next: (data) => {
-        console.log('Dashboard data:', data); // Debug log
+        console.log('Dashboard data:', data);
         this.stats = data;
         
         if (data.dailySales && data.dailySales.length > 0) {
           this.updateChart(data.dailySales);
         } else {
           console.warn('No daily sales data available');
-          // Show empty chart with message
           this.dailySalesChartData = {
             labels: ['No Data'],
             datasets: [{
@@ -94,7 +94,7 @@ export class DashboardComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Dashboard error:', error); // Debug log
+        console.error('Dashboard error:', error);
         this.loading = false;
         this.snackBar.open('Failed to load dashboard data', 'Close', {
           duration: 3000,
@@ -105,7 +105,7 @@ export class DashboardComponent implements OnInit {
   }
 
   updateChart(dailySales: any[]): void {
-    console.log('Updating chart with:', dailySales); // Debug log
+    console.log('Updating chart with:', dailySales);
     
     const labels = dailySales.map(s => {
       const date = new Date(s._id);
@@ -126,7 +126,6 @@ export class DashboardComponent implements OnInit {
       }]
     };
     
-    // Force chart update
     if (this.chart) {
       this.chart.update();
     }
