@@ -1,0 +1,110 @@
+<div class="reports-container">
+  <h1>Sales Reports</h1>
+
+  <mat-card class="filters-card">
+    <mat-card-content>
+      <div class="filters">
+        <mat-form-field appearance="outline">
+          <mat-label>Start Date</mat-label>
+          <input matInput [matDatepicker]="picker1" [(ngModel)]="startDate">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>End Date</mat-label>
+          <input matInput [matDatepicker]="picker2" [(ngModel)]="endDate">
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+
+        <button mat-raised-button (click)="applyDateFilter()">Apply Filter</button>
+        <button mat-button (click)="clearFilters()">Clear</button>
+        <button mat-raised-button color="accent" (click)="exportToCSV()">
+          <mat-icon>download</mat-icon>
+          Export CSV
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-progress-spinner *ngIf="loading" mode="indeterminate" diameter="50"></mat-progress-spinner>
+
+  <div *ngIf="!loading" class="stats-grid">
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-icon" style="background-color: #4caf50;">
+          <mat-icon>attach_money</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>Total Revenue</h3>
+          <p class="stat-value">₹{{ stats.totalRevenue | number:'1.2-2' }}</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-icon" style="background-color: #2196f3;">
+          <mat-icon>receipt</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>Total Bills</h3>
+          <p class="stat-value">{{ stats.totalBills }}</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-icon" style="background-color: #ff9800;">
+          <mat-icon>calculate</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>Average Bill</h3>
+          <p class="stat-value">₹{{ stats.averageBill | number:'1.2-2' }}</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-icon" style="background-color: #9c27b0;">
+          <mat-icon>percent</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>Total Tax</h3>
+          <p class="stat-value">₹{{ stats.totalTax | number:'1.2-2' }}</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-icon" style="background-color: #f44336;">
+          <mat-icon>local_offer</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>Total Discount</h3>
+          <p class="stat-value">₹{{ stats.totalDiscount | number:'1.2-2' }}</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div *ngIf="!loading" class="chart-container mt-20">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Top Selling Products</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <canvas baseChart
+          [type]="topProductsChartType"
+          [data]="topProductsChartData"
+          [options]="topProductsChartOptions">
+        </canvas>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+

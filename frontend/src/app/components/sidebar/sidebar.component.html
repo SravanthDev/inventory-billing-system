@@ -1,0 +1,45 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav mode="side" opened>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active">
+        <mat-icon>dashboard</mat-icon>
+        <span>Dashboard</span>
+      </a>
+      
+      <a mat-list-item routerLink="/inventory" routerLinkActive="active">
+        <mat-icon>inventory</mat-icon>
+        <span>Inventory</span>
+      </a>
+      
+      <a mat-list-item routerLink="/billing" routerLinkActive="active">
+        <mat-icon>point_of_sale</mat-icon>
+        <span>Create Bill</span>
+      </a>
+      
+      <a mat-list-item routerLink="/bills" routerLinkActive="active">
+        <mat-icon>receipt</mat-icon>
+        <span>All Bills</span>
+      </a>
+      
+      <a mat-list-item routerLink="/customers" routerLinkActive="active">
+        <mat-icon>people</mat-icon>
+        <span>Customers</span>
+      </a>
+      
+      <a *ngIf="authService.isAdmin()" mat-list-item routerLink="/products" routerLinkActive="active">
+        <mat-icon>category</mat-icon>
+        <span>Products</span>
+      </a>
+      
+      <a *ngIf="authService.isAdmin()" mat-list-item routerLink="/reports" routerLinkActive="active">
+        <mat-icon>analytics</mat-icon>
+        <span>Reports</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  
+  <mat-sidenav-content>
+    <!-- Content will be displayed here -->
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

@@ -1,0 +1,110 @@
+const mongoose = require('mongoose');
+
+const billItemSchema = new mongoose.Schema({
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product',
+    required: true
+  },
+  productName: {
+    type: String,
+    required: true
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: 1
+  },
+  price: {
+    type: Number,
+    required: true,
+    min: 0
+  },
+  subtotal: {
+    type: Number,
+    required: true
+  }
+}, { _id: false });
+
+const billSchema = new mongoose.Schema({
+  billNumber: {
+    type: String,
+    unique: true
+  },
+  customer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Customer',
+    default: null
+  },
+  items: [billItemSchema],
+  subtotal: {
+    type: Number,
+    min: 0,
+    default: 0
+  },
+  taxRate: {
+    type: Number,
+    default: 0,
+    min: 0,
+    max: 100
+  },
+  taxAmount: {
+    type: Number,
+    default: 0,
+    min: 0
+  },
+  discount: {
+    type: Number,
+    default: 0,
+    min: 0
+  },
+  total: {
+    type: Number,
+    min: 0,
+    default: 0
+  },
+  paymentMethod: {
+    type: String,
+    enum: ['cash', 'card', 'upi', 'other'],
+    default: 'cash'
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  }
+}, {
+  timestamps: true
+});
+
+// Calculate totals before validation
+billSchema.pre('validate', function(next) {
+  // Calculate item subtotals
+  this.items.forEach(item => {
+    item.subtotal = item.quantity * item.price;
+  });
+  
+  // Calculate bill totals
+  this.subtotal = this.items.reduce((sum, item) => sum + item.subtotal, 0);
+  this.taxAmount = (this.subtotal - this.discount) * (this.taxRate / 100);
+  this.total = this.subtotal - this.discount + this.taxAmount;
+  next();
+});
+
+// Auto-generate billNumber before validation
+billSchema.pre('validate', async function(next) {
+  if (!this.billNumber) {
+    const date = new Date();
+    const dateStr = date.toISOString().split('T')[0].replace(/-/g, '');
+    const count = await mongoose.model('Bill').countDocuments({
+      createdAt: {
+        $gte: new Date(date.setHours(0, 0, 0, 0)),
+        $lt: new Date(date.setHours(23, 59, 59, 999))
+      }
+    });
+    this.billNumber = `BILL${dateStr}${String(count + 1).padStart(4, '0')}`;
+  }
+  next();
+});
+
+module.exports = mongoose.model('Bill', billSchema);

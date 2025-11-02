@@ -1,0 +1,12 @@
+<div class="app-container">
+  <app-navbar *ngIf="authService.isAuthenticated$ | async"></app-navbar>
+  
+  <div class="main-content" [class.with-navbar]="authService.isAuthenticated$ | async">
+    <app-sidebar *ngIf="authService.isAuthenticated$ | async"></app-sidebar>
+    
+    <div class="content-area">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+

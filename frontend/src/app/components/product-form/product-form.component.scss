@@ -1,0 +1,16 @@
+.product-form {
+  display: flex;
+  flex-direction: column;
+  min-width: 500px;
+}
+
+mat-form-field {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 600px) {
+  .product-form {
+    min-width: 100%;
+  }
+}
+

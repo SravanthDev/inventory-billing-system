@@ -1,0 +1,66 @@
+<div class="bill-detail">
+  <h2 mat-dialog-title>Bill Details</h2>
+
+  <mat-dialog-content>
+    <div class="bill-header">
+      <div>
+        <p><strong>Bill Number:</strong> {{ bill.billNumber }}</p>
+        <p><strong>Date:</strong> {{ bill.createdAt | date:'medium' }}</p>
+      </div>
+      <div>
+        <p *ngIf="bill.customer"><strong>Customer:</strong> {{ bill.customer.name }}</p>
+        <p *ngIf="bill.customer"><strong>Phone:</strong> {{ bill.customer.phone }}</p>
+        <p *ngIf="!bill.customer"><strong>Customer:</strong> Walk-in Customer</p>
+      </div>
+    </div>
+
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of bill.items">
+          <td>{{ item.productName }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>₹{{ item.price | number:'1.2-2' }}</td>
+          <td>₹{{ item.subtotal | number:'1.2-2' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="bill-totals">
+      <div class="total-row">
+        <span>Subtotal:</span>
+        <span>₹{{ bill.subtotal | number:'1.2-2' }}</span>
+      </div>
+      <div class="total-row" *ngIf="bill.discount > 0">
+        <span>Discount:</span>
+        <span>-₹{{ bill.discount | number:'1.2-2' }}</span>
+      </div>
+      <div class="total-row" *ngIf="bill.taxAmount > 0">
+        <span>Tax:</span>
+        <span>₹{{ bill.taxAmount | number:'1.2-2' }}</span>
+      </div>
+      <div class="total-row final-total">
+        <span><strong>Total:</strong></span>
+        <span><strong>₹{{ bill.total | number:'1.2-2' }}</strong></span>
+      </div>
+    </div>
+
+    <div class="payment-info">
+      <p><strong>Payment Method:</strong> {{ bill.paymentMethod | uppercase }}</p>
+      <p *ngIf="bill.createdBy"><strong>Created by:</strong> {{ bill.createdBy.fullName || bill.createdBy.username }}</p>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="printBill()">Print</button>
+    <button mat-button mat-dialog-close>Close</button>
+  </mat-dialog-actions>
+</div>
+

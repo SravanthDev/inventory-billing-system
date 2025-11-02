@@ -1,0 +1,132 @@
+<div class="billing-container">
+  <h1>Create New Bill</h1>
+
+  <div class="billing-layout">
+    <div class="products-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Select Products</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Search Products</mat-label>
+            <input matInput [(ngModel)]="searchTerm" (input)="filterProducts()" placeholder="Search by name or ID">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+
+          <div class="products-grid">
+            <mat-card *ngFor="let product of filteredProducts" class="product-card" (click)="addToCart(product)">
+              <mat-card-content>
+                <div class="product-info">
+                  <h4>{{ product.name }}</h4>
+                  <p class="product-id">{{ product.productId }}</p>
+                  <p class="product-price">₹{{ product.price | number:'1.2-2' }}</p>
+                  <mat-chip [color]="product.stock > 0 ? 'primary' : 'warn'" selected>
+                    Stock: {{ product.stock }}
+                  </mat-chip>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="cart-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Bill Details</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="billingForm">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Customer (Optional)</mat-label>
+              <mat-select formControlName="customer">
+                <mat-option [value]="null">Walk-in Customer</mat-option>
+                <mat-option *ngFor="let customer of customers" [value]="customer._id">
+                  {{ customer.name }} - {{ customer.phone }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <div *ngIf="selectedProducts.length > 0" class="cart-items">
+              <h3>Cart Items</h3>
+              <div *ngFor="let item of selectedProducts; let i = index" class="cart-item">
+                <div class="item-info">
+                  <strong>{{ item.productName }}</strong>
+                  <p>₹{{ item.price | number:'1.2-2' }} × {{ item.quantity }}</p>
+                </div>
+                <div class="item-actions">
+                  <button mat-icon-button (click)="updateQuantity(item, -1)">
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                  <span>{{ item.quantity }}</span>
+                  <button mat-icon-button (click)="updateQuantity(item, 1)">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" (click)="removeFromCart(i)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+                <div class="item-subtotal">
+                  ₹{{ item.subtotal | number:'1.2-2' }}
+                </div>
+              </div>
+            </div>
+
+            <div class="billing-form-fields">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Tax Rate (%)</mat-label>
+                <input matInput type="number" formControlName="taxRate" min="0" max="100">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Discount (₹)</mat-label>
+                <input matInput type="number" formControlName="discount" min="0">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Payment Method</mat-label>
+                <mat-select formControlName="paymentMethod">
+                  <mat-option value="cash">Cash</mat-option>
+                  <mat-option value="card">Card</mat-option>
+                  <mat-option value="upi">UPI</mat-option>
+                  <mat-option value="other">Other</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="totals">
+              <div class="total-row">
+                <span>Subtotal:</span>
+                <span>₹{{ subtotal | number:'1.2-2' }}</span>
+              </div>
+              <div class="total-row" *ngIf="discount > 0">
+                <span>Discount:</span>
+                <span>-₹{{ discount | number:'1.2-2' }}</span>
+              </div>
+              <div class="total-row" *ngIf="taxRate > 0">
+                <span>Tax ({{ taxRate }}%):</span>
+                <span>₹{{ taxAmount | number:'1.2-2' }}</span>
+              </div>
+              <div class="total-row final-total">
+                <span><strong>Total:</strong></span>
+                <span><strong>₹{{ total | number:'1.2-2' }}</strong></span>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button mat-raised-button color="warn" (click)="resetForm()" [disabled]="selectedProducts.length === 0">
+                Clear
+              </button>
+              <button mat-raised-button color="primary" (click)="createBill()" [disabled]="selectedProducts.length === 0">
+                Generate Bill
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+

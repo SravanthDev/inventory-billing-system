@@ -1,0 +1,22 @@
+.title {
+  margin-left: 10px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+@media (max-width: 600px) {
+  .user-info span {
+    display: none;
+  }
+}
+
