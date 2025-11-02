@@ -25,7 +25,8 @@
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/styles.scss"],
-            "scripts": []
+            "scripts": [],
+            "baseHref": "./"
           },
           "configurations": {
             "production": {
@@ -41,7 +42,13 @@
                   "maximumError": "4kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "optimization": true,
+              "sourceMap": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "baseHref": "./"
             },
             "development": {
               "buildOptimizer": false,
@@ -56,15 +63,12 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "inventory-billing:build"
-          },
           "configurations": {
             "production": {
-              "browserTarget": "inventory-billing:build:production"
+              "buildTarget": "inventory-billing:build:production"
             },
             "development": {
-              "browserTarget": "inventory-billing:build:development"
+              "buildTarget": "inventory-billing:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -73,6 +77,6 @@
     }
   },
   "cli": {
-    "analytics": "a4880da3-12b7-4f2a-9088-61923442c3e6"
+    "analytics": false
   }
 }
