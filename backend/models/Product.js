@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const productSchema = new mongoose.Schema({
   productId: {
     type: String,
-    unique: true,
-    required: true
+    unique: true
   },
   name: {
     type: String,
@@ -48,8 +47,8 @@ const productSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Auto-generate productId before saving
-productSchema.pre('save', async function(next) {
+// Auto-generate productId before validation
+productSchema.pre('validate', async function(next) {
   if (!this.productId) {
     const count = await mongoose.model('Product').countDocuments();
     this.productId = `PROD${String(count + 1).padStart(5, '0')}`;
@@ -58,4 +57,3 @@ productSchema.pre('save', async function(next) {
 });
 
 module.exports = mongoose.model('Product', productSchema);
-

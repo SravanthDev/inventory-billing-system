@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const customerSchema = new mongoose.Schema({
   customerId: {
     type: String,
-    unique: true,
-    required: true
+    unique: true
   },
   name: {
     type: String,
@@ -41,8 +40,8 @@ const customerSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Auto-generate customerId before saving
-customerSchema.pre('save', async function(next) {
+// Auto-generate customerId before validation
+customerSchema.pre('validate', async function(next) {
   if (!this.customerId) {
     const count = await mongoose.model('Customer').countDocuments();
     this.customerId = `CUST${String(count + 1).padStart(5, '0')}`;
@@ -51,4 +50,3 @@ customerSchema.pre('save', async function(next) {
 });
 
 module.exports = mongoose.model('Customer', customerSchema);
-
