@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://inventory-billing-system-v4bi.onrender.com/'
+  apiUrl: 'https://inventory-billing-system-v4bi.onrender.com'
 
 };
 
